@@ -1,0 +1,70 @@
+{% extends '@App/template.html.twig' %}
+{% block title %} Category {% endblock %}
+{% block page_title %} Category Management {% endblock %}
+{% block content %}
+<div class="panel">
+	<div class="panel-heading">
+		<div class="col-md-6">
+			<a href="{{ path('category.create') }}" class="btn btn-default">
+				Create
+			</a>
+			<a href="{{ path('category.index') }}" class="btn btn-default">
+				Refresh
+			</a>
+		</div>
+		<div class="col-md-6">
+			<form action="{{ path('category.index') }}">
+				<div class="input-group">
+	               <input type="text" class="form-control" name="search"  value="{{ search }}"  />
+	               <input type="hidden" name="page"  value="{{ page }}"  />
+	               <span class="input-group-btn">
+	                  <button class="btn btn-default" type="submit">
+	                    Search
+	                  </button>
+	               </span>
+	            </div>
+			</form>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="panel-body">
+		{% include('@App/alert.html.twig') %}
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th width="50">No</th>
+						<th width="150">Date Record</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th class="text-center" width="200">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% if data|length > 0 %}
+					{% for row in data %}
+						<tr>
+							<td>{{ num }}</td>
+							<td>{{ row.createdAt|date('Y-m-d H:i:s') }}</td>
+							<td>{{ row.name }}</td>
+							<td>{{ row.description }}</td>
+							<td class="text-center">
+								<a href="{{ path('category.edit',{ id : row.id }) }}" class="btn btn-sm btn-default">Edit</a>
+								<a href="{{ path('category.show',{ id : row.id }) }}" class="btn btn-sm btn-default">Show</a>
+								<a onclick="return confirm('Are you sure delete this ?');" href="{{ path('category.delete',{ id : row.id }) }}" class="	btn btn-sm btn-default">
+									Delete
+								</a>
+							</td>
+						</tr>
+						{% set num = num + 1 %}
+					{% endfor %}
+				{% else %}
+					<tr><td colspan="5" class="text-center">No Data</td></tr>
+				{% endif %}
+				</tbody>
+			</table>
+			{{ knp_pagination_render(data) }}
+		</div>
+	</div>
+</div>
+{% endblock %}
